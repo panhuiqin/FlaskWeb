@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提交修改页面</title>
+</head>
+<body>
+<div style="height: 70px;display: flex;align-items: center;background-color: #86a5f3; ">
+
+    <button style="height: 40px;width: 60px" onclick="history.go(-1)">
+        返回
+    </button>
+
+</div>
+
+
+<div style="display: flex;align-items: center;background-color: #6cc8d4; ">
+    <div id="url_info" style="height: 50px;display: flex;align-items: center ">
+    </div>
+    <div style="height: 50px; margin-left: 50px;display: flex;align-items: center ">
+        接口备注：
+    </div>
+    <div id="remarks_info" style="height: 50px; margin-left: 1px;display: flex;align-items: center ">
+    </div>
+</div>
+
+
+<div id="case_title_all" style="height: 50px;display: flex;align-items: center;background-color: #e7ecec; ">
+    <div>用例标题：</div>
+    <textarea id="case_title" style="width: 95%;height: 26px; font-size: 20px; text-align: left " type="text"
+              name="user"></textarea>
+
+</div>
+
+<table id="datatable" border="1" width="100%" cellpadding="0" cellspacing="0" weight="30%">
+    <thead>
+    <tr>
+        <th style="height: 40px;width: 17%">入参(parameter)</th>
+        <th style="height: 40px;width: 5%">
+            <input id="case_grade" style="width: 92%; height: 88%; color: #f60606;font-size: 22px;" type="text" name="user" placeholder="用例等级" >
+        </th>
+        <th style="height: 40px;width: 5%">
+            <select id="parameter_type" style="width: 100%; height: 100%"></select>
+        </th>
+        <th style="width: 28%">出参(response)</th>
+        <th style="width: 28%">运行结果</th>
+        <th style="width: 10%">断言结果</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr>
+        <td style="height: 350px" colspan="3">
+            <textarea id="submit_name" style="width: 100%;height: 100%" type="text" name="user" value="输入参数"></textarea>
+        </td>
+
+        <td style="height: 350px">
+            <textarea id="submit_password" style="width: 100%;height: 100%;" type="text" name="password"
+                      value="输出参数"></textarea>
+        </td>
+
+        {#            <td style="height: 350px">#}
+        {#                <textarea id="submit_password" style="width: 100%;height: 100%;" type="text" name="password" value="输出参数"></textarea>#}
+        {#            </td>#}
+
+        <td style="height: 350px">
+            <textarea id="outputResults" style="width: 100%;height: 100%; font-size: 14px;" type="text" name="user"
+                      readonly="readonly"></textarea>
+        </td>
+
+        <td style="height: 350px">
+            <textarea id="assertionResults" style="width: 100%;height: 100%; font-size: 25px;" type="text" name="user"
+                      readonly="readonly">断言结果：</textarea>
+        </td>
+    </tr>
+
+    </tbody>
+
+</table>
+
+
+<button style="height: 50px;width: 80px" onclick="submit()">
+    保存用例
+</button>
+
+{#<button style="height: 50px;width: 80px" onclick="run_Results()">#}
+{#    参数提取#}
+{#</button>#}
+
+<button style="height: 50px;width: 80px" onclick="run_Results()">
+    运行
+</button>
+
+<table id="table_parameter" border="1" width="100%" cellpadding="0" cellspacing="0" weight="30%">
+    <thead>
+    <tr style="height: 40px">
+        <th style="height: 100%;width: 20%">出参名</th>
+        <th style="height: 100%;width: 20%">来源</th>
+        <th style="height: 100%;width: 20%">解析表达式</th>
+        {#        <th style="height: 100%;width: 20%">第几个匹配项</th>#}
+        <th style="height: 100%;width: 20%">操作</th>
+    </tr>
+    </thead>
+
+    <tbody id="data_add">
+
+    {#    <tr>#}
+    {#        <td class="onlyOne_td">#}
+    {#            <label>#}
+    {#                <input style="width: 98%" class="onlyOne" type="text" name="user">#}
+    {#            </label>#}
+    {#        </td>#}
+    {#        <td class="onlyOne_td">#}
+    {#            <label>#}
+    {#                <select id="data_add_select" class="onlyOne" type="text" name="user">#}
+    {#                    <option>parameter</option>#}
+    {#                    <option>response</option>#}
+    {#                </select>#}
+    {#            </label>#}
+    {#        </td>#}
+    {#        <td class="onlyOne_td">#}
+    {#            <label>#}
+    {#                <input style="width: 98%" class="onlyOne" type="text" name="user">#}
+    {#            </label>#}
+    {#        </td>#}
+    {##}
+    {#        <td class="onlyOne_td">#}
+    {#            <button>新增</button>#}
+    {#            <button>删除</button>#}
+    {#            <button>提取</button>#}
+    {#            <button>关联用例</button>#}
+    {#        </td>#}
+    {#    </tr>#}
+
+    </tbody>
+
+</table>
+
+<dialog id="dialog_relation" style="width: 1000px; height: 570px; ">
+    <div id="relation_case_id">
+        关联用例：
+    </div>
+    <div id="run_case_caseTitle">
+        需要关联用例
+    </div>
+
+    <table id="table_parameter" border="1" width="100%" cellpadding="0" cellspacing="0" weight="30%">
+        <thead>
+        <tr style="height: 30px">
+            <th style="height: 100%;width: 20%">需关联用例名</th>
+            <th style="height: 100%;width: 20%">检查用例是否存在</th>
+            <th style="height: 100%;width: 20%">关联用例字段</th>
+            {#        <th style="height: 100%;width: 20%">第几个匹配项</th>#}
+            <th style="height: 100%;width: 20%">操作</th>
+        </tr>
+        </thead>
+
+        <tbody id="relation_data_add">
+
+        </tbody>
+
+    </table>
+
+
+    <div style="display: flex">
+
+        <button id="cancel" onclick="close_relation_table()"
+                style="margin-top: 370px; width: 80px; margin-left: 850px; height: 40px">
+            关闭
+        </button>
+    </div>
+
+
+</dialog>
+
+
+<div style="width: 100%"></div>
+</body>
+
+{#<script src="https://unpkg.com/axios/dist/axios.min.js"></script>#}
+<script type="text/javascript" src="../static/axios.js"></script>
+
+<script>
+    function isJSON(str) {
+        if (typeof str == 'string') {
+            try {
+                var obj = JSON.parse(str);
+                if (typeof obj == 'object' && obj) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } catch (e) {
+                console.log('error：' + str + '!!!' + e);
+                return false;
+            }
+        } else
+            return false
+    }
+
+    let options = document.getElementById('submit_name').options
+    let optionsHttp = document.getElementById('submit_password').options
+    // 获取关联用例弹框的id
+    let dialogRelation = document.getElementById("dialog_relation")
+
+    {#console.log(options)#}
+    axios.post('http://{{ host }}/queryCaseAllInfo', {
+        caseId: getQueryVariable('result')
+    })
+        .then(response => {
+            {#console.log("response = " + response)#}
+            let url_data = response.data.data["apiType"] + "://" + response.data.data["apiHost"] + response.data.data["apiPath"]
+            let parameter = response.data.data["parameter"]
+            let res = response.data.data["response"]
+            {#let Relate = response.data.data["relate"]#}
+            let remarks = response.data.data["remarks"]
+            let caseTitle = response.data.data["caseTitle"]
+            let parameter_type = response.data.data["parameter_type"]
+            let case_operate = response.data.data["case_operate"]
+            let case_grade = response.data.data["case_level"]
+
+            let url_info = document.getElementById("url_info")
+            let remarks_info = document.getElementById("remarks_info")
+            let case_title = document.getElementById("case_title")
+            let parameterType = document.getElementById('parameter_type')
+            let caseOperate = document.getElementById('case_operate')
+
+            document.getElementById('case_grade').value = case_grade
+
+            {#let parameterType_data = [{"id": 1, "name": "Json"}, {"id": 2, "name": "Text"}]#}
+            let parameterType_data = [{"id": 1, "name": "Json"}, {"id": 2, "name": "Text"}, {"id": 3, "name": "File"}]
+            let expression_data = [{"id": 1, "name": "parameter"}, {"id": 2, "name": "response"}]
+
+            url_info.innerHTML = url_data
+            remarks_info.innerHTML = remarks
+            case_title.innerHTML = caseTitle
+            parameterType_data.forEach(i => {
+                parameterType.add(new Option(i.name, i.id));
+            })
+            parameterType.value = parameter_type;
+
+            let input_A = document.getElementById("submit_name")
+            let input_B = document.getElementById("submit_password")
+
+            if (parameter === '') {
+                input_A.value = parameter;
+            } else input_A.value = JSON.stringify(JSON.parse(parameter), null, "\t");
+
+            if (res === '') {
+                input_B.value = res;
+            } else input_B.value = JSON.stringify(JSON.parse(res), null, "\t");
+
+            {#let info_Relate = document.getElementById("submit_relate")#}
+            {#info_Relate.value = JSON.stringify(JSON.parse(Relate), null, "\t");#}
+
+            if (case_operate.length > 0) {
+                case_operate.map(operate => {
+                    let tbody_data = document.getElementById('data_add')
+                    let tr = document.createElement('tr')
+                    tr.id = "table_id" + operate["id"]
+                    let td1 = document.createElement('td')
+                    let td2 = document.createElement('td')
+                    let td3 = document.createElement('td')
+                    let td4 = document.createElement('td')
+                    let select = document.createElement('select')
+                    expression_data.forEach(i => {
+                        select.add(new Option(i.name, i.id));
+                    })
+                    select.value = operate["source"];
+                    let input1 = document.createElement('input')
+                    input1.value = operate["parameterName"]
+                    let input2 = document.createElement('input')
+                    input2.value = operate["expression"]
+
+                    td4.value = operate["relation"]
+
+                    td1.className = "onlyOne_td"
+                    td2.className = "onlyOne_td"
+                    td3.className = "onlyOne_td"
+                    td4.className = "onlyOne_td"
+                    select.className = "onlyOne"
+                    input1.className = "onlyOne2"
+                    input2.className = "onlyOne2"
+
+                    let addBt = document.createElement('button')
+                    addBt.innerHTML = '新增'
+                    addBt.setAttribute('onClick', "add_table_row()")
+                    td4.appendChild(addBt)
+
+                    let deleteBt = document.createElement('button')
+                    deleteBt.innerHTML = '删除'
+                    {#deleteBt.setAttribute('onClick', "del_table_row(table_id" + operate["expression"] + ")")#}
+                    deleteBt.onclick = () => del_table_row(tr)
+                    td4.appendChild(deleteBt)
+
+                    {#editA.href = 'http://{{ host }}/submitUpdate?result=' + itme[0]#}
+                    let editBt = document.createElement('button')
+                    editBt.innerHTML = '提取'
+                    editBt.onclick = () => extract_table_row(tr)
+                    td4.appendChild(editBt)
+
+                    {#let runBt = document.createElement('button')#}
+                    {#runBt.innerHTML = '关联用例'#}
+                    {#runBt.onclick = () => open_relation_table(tr)#}
+                    {#td4.appendChild(runBt)#}
+                    {#editTd.appendChild(runA)#}
+
+                    td1.appendChild(input1)
+                    td2.appendChild(select)
+                    td3.appendChild(input2)
+                    tr.appendChild(td1)
+                    tr.appendChild(td2)
+                    tr.appendChild(td3)
+                    tr.appendChild(td4)
+                    tbody_data.appendChild(tr)
+                })
+
+            } else add_table_row()
+
+        })
+        .catch(function (error) {
+            console.error(error)
+            {#options.add(new Option("异常", "js add"))#}
+            optionsHttp.add(new optionsHttp("异常", "js add"))
+        })
+
+    function submit() {
+        let data_add_table = document.getElementById("data_add")
+        let abc = data_add_table.childNodes
+        let abc_dict_all = []
+        console.log(abc)
+        let i_mub = 0
+        abc.forEach(tr => {
+            let abc_dict = {}
+            let td_all = tr.childNodes
+            for (let i = 0; i < td_all.length; i++) {
+                let td = td_all[i]
+                {#console.log(td.childNodes[0].value)#}
+                if (i === 0) {
+                    abc_dict["parameterName"] = td.childNodes[0].value
+                } else if (i === 1) {
+                    abc_dict["source"] = td.childNodes[0].value
+                } else if (i === 2) {
+                    abc_dict["expression"] = td.childNodes[0].value
+                } else if (i === 3) {
+                    abc_dict["relation"] = td.value
+                }
+            }
+            {#console.log(abc_dict)#}
+            // 第一次循环的数据不取
+            if (i_mub > 0) {
+                abc_dict_all.push(abc_dict)
+            }
+            i_mub++
+        })
+        console.log(abc_dict_all)
+
+
+        console.log(getQueryVariable('result'))
+        let par = document.getElementById('submit_name').value
+        let res = document.getElementById('submit_password').value
+        {#let rel = document.getElementById('submit_relate').value#}
+        let title = document.getElementById('case_title').value
+        let parameterType = document.getElementById('parameter_type').value
+        let case_grade_id = document.getElementById('case_grade').value
+        if (!isJSON(par)) {
+            alert('入参 不是JSON')
+            return
+        } else if (!isJSON(res)) {
+            alert('出参 不是JSON')
+            return
+        } /*else if (!isJSON(rel)) {
+            alert('关联用例 不是JSON')
+            return
+        }*/
+
+        axios.post('http://{{ host }}/submitUpdateData', {
+            parameter: JSON.stringify(JSON.parse(par)),
+            response: JSON.stringify(JSON.parse(res)),
+            parameterType: parseInt(parameterType),
+            {#relate: JSON.stringify(JSON.parse(rel)),#}
+            caseTitle: title,
+            caseLevel: case_grade_id,
+            caseId: getQueryVariable('result'),
+            extractParameters: abc_dict_all
+        }).then(res => {
+            if (res.data.code == 1) {
+                alert('修改成功')
+                history.go(-1)
+            }
+            else{
+                alert(res.data.msg)
+            }
+            console.error(res)
+        }).catch(err => {
+            alert("操作异常" + err)
+            console.error(err)
+        })
+
+    }
+
+
+
+    function run_Results() {
+        let par = document.getElementById('submit_name').value
+        let res = document.getElementById('submit_password').value
+        {#let rel = document.getElementById('submit_relate').value#}
+        let output_Results = document.getElementById("outputResults")
+        let assertion_Results = document.getElementById("assertionResults")
+        let parameterType = document.getElementById('parameter_type').value
+        if (!isJSON(par)) {
+            alert('入参 不是JSON')
+            return
+        } else if (!isJSON(res)) {
+            alert('出参 不是JSON')
+            return
+        }
+        assertion_Results.innerHTML = "断言结果："
+        output_Results.value = "正在运行中，请稍等......"
+
+        axios.post('http://{{ host }}/runTest', {
+            parameter: par,
+            response: res,
+            parameterType: parseInt(parameterType),
+            caseId: getQueryVariable('result')
+        }).then(res => {
+            if (res.data.code == 1) {
+                document.getElementById("outputResults").value = "运行url：\n" + res.data.url + "\n" + "运行结果：\n" + res.data.data
+                assertion_Results.innerHTML = "断言结果：\n" + res.data.results
+                {#history.go(-1)#}
+            }
+            console.error(res)
+        }).catch(err => {
+            alert("操作异常" + err)
+            console.error(err)
+        })
+    }
+
+
+    function getQueryVariable(variable) {
+        var query = window.location.search.substring(1);
+        var vars = query.split("&");
+        for (var i = 0; i < vars.length; i++) {
+            var pair = vars[i].split("=");
+            if (pair[0] == variable) {
+                return pair[1];
+            }
+        }
+        return (false);
+    }
+
+    function add_table_row() {
+        {
+            let expression_data = [{"id": 1, "name": "parameter"}, {"id": 2, "name": "response"}]
+            let tbody_data = document.getElementById('data_add')
+            let tr = document.createElement('tr')
+            let td1 = document.createElement('td')
+            let td2 = document.createElement('td')
+            let td3 = document.createElement('td')
+            let td4 = document.createElement('td')
+            let select = document.createElement('select')
+            expression_data.forEach(i => {
+                select.add(new Option(i.name, i.id));
+            })
+            let input1 = document.createElement('input')
+            let input2 = document.createElement('input')
+            td1.className = "onlyOne_td"
+            td2.className = "onlyOne_td"
+            td3.className = "onlyOne_td"
+            td4.className = "onlyOne_td"
+            select.className = "onlyOne"
+            input1.className = "onlyOne2"
+            input2.className = "onlyOne2"
+
+            let addBt = document.createElement('button')
+            addBt.innerHTML = '新增'
+            {#addBt.setAttribute('onClick', "add_table_row()")#}
+            addBt.onclick = () => add_table_row("")
+            td4.appendChild(addBt)
+
+            let deleteBt = document.createElement('button')
+            deleteBt.innerHTML = '删除'
+            deleteBt.onclick = () => del_table_row(tr)
+            td4.appendChild(deleteBt)
+
+            let editBt = document.createElement('button')
+            editBt.innerHTML = '提取'
+            editBt.onclick = () => extract_table_row(tr)
+            td4.appendChild(editBt)
+
+            {#let runBt = document.createElement('button')#}
+            {#runBt.innerHTML = '关联用例'#}
+            {#runBt.onclick = () => open_relation_table(tr)#}
+            {#td4.appendChild(runBt)#}
+            {#editTd.appendChild(runA)#}
+
+            td1.appendChild(input1)
+            td2.appendChild(select)
+            td3.appendChild(input2)
+            tr.appendChild(td1)
+            tr.appendChild(td2)
+            tr.appendChild(td3)
+            tr.appendChild(td4)
+            tbody_data.appendChild(tr)
+
+        }
+    }
+
+    function del_table_row(index) {
+        console.log(index)
+        index.remove()
+    }
+
+    // 提取参数的方法
+    function extract_table_row(index) {
+
+        let cells = index.getElementsByTagName("td");
+        let abc = {}
+        for (let i = 0; i <= cells.length - 1; i++) {
+            {#console.log(cells[i])#}
+            {#let td_value = cells[i].value#}
+            {#console.log(td_value)#}
+            if (i === 0) {
+                let req_name1 = cells[i].getElementsByTagName("input")[0].value
+                abc["parameterName"] = req_name1
+                console.log(req_name1)
+            }
+            if (i === 1) {
+                let req_name2 = cells[i].getElementsByTagName("select")[0].value
+                console.log(req_name2)
+                abc["expression"] = req_name2
+            }
+            if (i === 2) {
+                let req_name3 = cells[i].getElementsByTagName("input")[0].value
+                abc["relation"] = req_name3
+                console.log(req_name3)
+            }
+        }
+        if (abc["parameterName"] && abc["expression"] && abc["relation"]) {
+            let abc_data = document.getElementById("outputResults").value
+
+            // 判断是否有运行用例，没有运行无法进行提取
+            if (abc_data) {
+
+                // 判断传参提取的参数是body还是request
+                if (abc["expression"] === "1") {
+                    abc_data = document.getElementById("submit_name").value
+                } else if (abc["expression"] === "2") {
+                    abc_data = document.getElementById("outputResults").value
+                    abc_data = abc_data.split("运行结果：")[1]
+                }
+
+                // 判断是否有运行用例，没有运行无法进行提取
+                {#if (abc_data) {#}
+                {#let req_data = abc_data.split("运行结果：")[1]#}
+
+                axios.post('http://{{ host }}/ExtractParameters', {
+                    parameter: abc_data,
+                    expression: abc["expression"],
+                    {#relation: abc["relation"]#}
+                }).then(req => {
+                    if (req.data.code === 1) {
+                        alert('提取成功 \n' + req.data.data.extractData.data)
+                    } else if (req.data.code === 99) {
+                        alert('提取失败')
+                    }
+                }).catch(err => {
+                    alert("操作异常" + err)
+                })
+
+            } else {
+                alert("先运行用例再提取")
+            }
+        } else {
+            alert("请填写完整参数")
+        }
+
+        {#console.log(abc)#}
+    }
+
+    function open_relation_table(index) {
+
+        // 存在数据展示数据信息
+        if (index.childNodes[3].value) {
+            let relation_data = JSON.parse(index.childNodes[3].value)
+            let relation_data_list = []
+            {#console.log(JSON.parse(index.childNodes[3].value))#}
+
+            // 循环写入数据，生成表格
+            relation_data.forEach(relation_data_list_list => {
+                console.log(relation_data_list_list)
+                relation_data_list.push(relation_data_list_list["caseId"])
+
+                let dialog_table = document.getElementById("relation_data_add")
+                let dialog_tr = document.createElement("tr")
+
+                let td1 = document.createElement('td')
+                let td2 = document.createElement('td')
+                let td3 = document.createElement('td')
+                let td4 = document.createElement('td')
+
+                let select = document.createElement('select')
+                /*
+                expression_data.forEach(i => {
+                    select.add(new Option(i.name, i.id));
+                })
+                 */
+                let parameter_data = relation_data_list_list["relationFields"]
+                select.add(new Option(parameter_data, parameter_data));
+                {#select.value = relation_data_list_list["relationFields"];#}
+                td3.appendChild(select)
+
+                let input1 = document.createElement('input')
+                input1.value = relation_data_list_list["caseId"]
+                td1.appendChild(input1)
+
+                td1.className = "onlyOne_td"
+                td2.className = "onlyOne_td"
+                td3.className = "onlyOne_td"
+                td4.className = "onlyOne_td"
+                select.className = "onlyOne"
+                input1.className = "onlyOne3"
+                {#input2.className = "onlyOne2"#}
+
+                let getBt = document.createElement('button')
+                getBt.innerHTML = '查询'
+                getBt.onclick = () => query_parameters(dialog_tr)
+                td2.appendChild(getBt)
+
+                let addBt = document.createElement('button')
+                addBt.innerHTML = '新增'
+                addBt.onclick = () => add_dialog_tr(dialog_tr)
+                td4.appendChild(addBt)
+
+                let deleteBt = document.createElement('button')
+                deleteBt.innerHTML = '删除'
+                deleteBt.onclick = () => del_dialog_tr(dialog_tr)
+                td4.appendChild(deleteBt)
+
+                dialog_tr.appendChild(td1)
+                dialog_tr.appendChild(td2)
+                dialog_tr.appendChild(td3)
+                dialog_tr.appendChild(td4)
+                dialog_table.appendChild(dialog_tr)
+
+            })
+            console.log(relation_data_list)
+
+        } else {
+            // 不存在数据信息，新增空白列表
+            add_dialog_tr()
+
+        }
+
+
+        {#let relationCaseId = document.getElementById("relation_case_id")#}
+        {#relationCaseId.innerHTML = "关联用例：" + getQueryVariable('result')#}
+
+
+        // 打开数据关联弹框
+        dialogRelation.showModal()
+    }
+
+    function close_relation_table() {
+
+        // 移除所有子节点
+        let dialog_table = document.getElementById("relation_data_add")
+        let pObjs = dialog_table.childNodes
+        for (let i = pObjs.length - 1; i >= 0; i--) {
+            dialog_table.removeChild(pObjs[i]);
+        }
+        dialogRelation.close()
+    }
+
+    function query_parameters(index) {
+        let caseId = index.childNodes[0].childNodes[0].value
+        let select_dom = index.childNodes[2].childNodes[0]
+        let select_dom_data = select_dom.value
+
+        // 移除所有子节点
+        let pObjs = select_dom.childNodes
+        for (let i = pObjs.length - 1; i >= 0; i--) {
+            select_dom.removeChild(pObjs[i]);
+        }
+
+        console.log(caseId)
+        axios.post('http://{{ host }}/GetRelationData', {
+            caseId: caseId
+        }).then(req => {
+            if (req.data.code === 1) {
+
+                let data_list = req.data.data.extractCaseId
+
+                // 重新新增下拉选项
+
+                data_list.forEach(tr_data => {
+                    select_dom.add(new Option(tr_data, tr_data));
+                })
+
+
+                if (select_dom_data && function () {
+                    data_list.forEach(ab => {
+                        console.log(ab)
+                        if (ab === select_dom_data) {
+                            return true
+                        }
+                    })
+                }) {
+                    select_dom.value = select_dom_data
+                } else {
+                    select_dom.value = data_list[0]
+                }
+            }
+        })
+    }
+
+    // 删除关联用例行
+    function del_dialog_tr(index) {
+        index.remove()
+    }
+
+    // 新增不存在数据时，关联用例的空白框
+    function add_dialog_tr() {
+        {
+            {#let expression_data = [{"id": 1, "name": "parameter"}, {"id": 2, "name": "response"}]#}
+            let dialog_table = document.getElementById('relation_data_add')
+            let dialog_tr = document.createElement('tr')
+            let td1 = document.createElement('td')
+            let td2 = document.createElement('td')
+            let td3 = document.createElement('td')
+            let td4 = document.createElement('td')
+
+            let select = document.createElement('select')
+            td3.appendChild(select)
+
+            let input1 = document.createElement('input')
+            td1.appendChild(input1)
+
+            let input2 = document.createElement('input')
+
+            td1.className = "onlyOne_td"
+            td2.className = "onlyOne_td"
+            td3.className = "onlyOne_td"
+            td4.className = "onlyOne_td"
+            select.className = "onlyOne"
+            input1.className = "onlyOne3"
+
+            let getBt = document.createElement('button')
+            getBt.innerHTML = '查询'
+            getBt.onclick = () => query_parameters(dialog_tr)
+            td2.appendChild(getBt)
+
+            let addBt = document.createElement('button')
+            addBt.innerHTML = '新增'
+            addBt.onclick = () => add_dialog_tr(dialog_tr)
+            td4.appendChild(addBt)
+
+            let deleteBt = document.createElement('button')
+            deleteBt.innerHTML = '删除'
+            deleteBt.onclick = () => del_dialog_tr(dialog_tr)
+            td4.appendChild(deleteBt)
+
+            dialog_tr.appendChild(td1)
+            dialog_tr.appendChild(td2)
+            dialog_tr.appendChild(td3)
+            dialog_tr.appendChild(td4)
+            dialog_table.appendChild(dialog_tr)
+
+        }
+    }
+
+</script>
+
+<style>
+
+    select {
+        color: #f60606;
+        margin-right: 10px;
+        font-size: 22px
+    }
+
+    .onlyOne {
+    {#height: 100%;#} width: 100%;
+        font-size: 20px;
+        height: 100%;
+    }
+
+    .onlyOne2 {
+        width: 98%;
+        font-size: 20px;
+        height: 100%;
+    }
+
+    .onlyOne3 {
+        width: 97%;
+        font-size: 20px;
+        height: 100%;
+    }
+
+    .onlyOne_td {
+        height: 20px;
+    }
+</style>
+
+
+</html>

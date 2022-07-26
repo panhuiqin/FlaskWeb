@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公司自动化用例维护 - 场景用例</title>
+    <style>
+        #popLayer{
+            display: none;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(192,192,192,0.3);
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        #popBox{
+            display: none;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            height: 400px;
+            width: 600px;
+        }
+        label{
+            width: 75px;
+            text-align: left;
+            vertical-align: middle;
+            display: inline-block;
+        }
+        input{
+            font-family:"微软雅黑";
+            font-size: 15px;
+        }
+        textarea{
+            font-family:"微软雅黑";
+            font-size: 15px;
+        }
+        select{
+            font-family:"微软雅黑";
+            font-size: 15px;
+        }
+        div#nav{
+        float: left;
+        height: 50px;
+        margin-left: 10px;
+    }
+    div#nav ul{
+        margin: 0 auto;
+        width: 240px;
+        display: inline-block;
+        flex-direction: row;
+        justify-content: center;
+    }
+    div#nav ul li{
+        list-style: none;
+        float: left;
+        width: 118px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border: 1px solid dimgray;
+        background: whitesmoke;
+    }
+    div#nav ul li a:link,a:visited{
+        color: black;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    div#nav ul li a:hover{
+        color: black;
+        font-size: 18px;
+        font-weight:bold;
+        text-decoration: underline;
+    }
+    table {
+    table-layout: fixed;
+    word-break: break-all;
+    }
+    table thead th{
+    border-bottom:1px solid #DCDCDC;
+    height:40px;
+    line-height:40px;
+    background:#F5F5F5;
+    }
+    table#scenceTable tbody td{
+    border-bottom:1px solid #DCDCDC;
+    height:35px;
+    text-align:center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+    }
+    table tbody tr button{
+        margin-left: 5px ;
+    }
+    table tbody tr:hover{
+        background-color: powderblue;
+    }
+    div.center_style{
+        text-align: center;
+    }
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+    ul.pagination li {
+        display: inline;
+    }
+    ul.pagination li a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+    }
+    ul.pagination li a.active {
+        background-color: #86a5f3;
+        color: white;
+        border: 1px solid #86a5f3;
+    }
+    ul.pagination li a:hover:not(.active) {
+        background-color: #ddd;
+    }
+    div#scenceBox{
+        height: 700px;
+        width: 1300px;
+        display: none;
+    }
+        div#scence{
+            height: 670px;
+        }
+
+        div#closeScence{
+            height: 45px;
+            text-align: center;
+            line-height: 40px;
+        }
+        div#closeScence > button{
+            font-size: 18px;
+        }
+        div#sceneceBasicInfo,div#scenceRunInfo{
+            height: 40px;
+            line-height: 40px;
+            font-size: 18px;
+            border-bottom: 1px solid #DCDCDC;
+            font-weight: bold;
+        }
+        div#scenceCasesInfo{
+            overflow: auto;
+            height: 580px;
+        }
+        div.caseInfo{
+            box-shadow: 1px 1px 5px 1px lightgrey;
+            height: 40px;
+            line-height: 40px;
+            margin: 10px;
+        }
+        div.caseInfo > div.caseBasic{
+            height: 40px;
+            border-bottom: 1px solid #DCDCDC;
+        }
+        div.caseInfo > div.caseBasic > div{
+            float: left;
+        }
+        div.caseInfo > div.caseBasic > div.caseNo{
+            width: 40px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseSeq{
+            width: 60px;
+            margin-left: 10px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseReqType{
+            width: 50px;
+            margin-left: 10px;
+            color: #4098c8;
+        }
+        div.caseInfo > div.caseBasic > div.caseRemark{
+            width: 300px;
+            margin-left: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        div.caseInfo > div.caseBasic > div.caseUrl{
+            width: 500px;
+            margin-left: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        div.caseInfo > div.caseBasic > div.caseCode{
+            margin-left: 120px;
+            width: 50px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseResult{
+            width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+        div.caseInfo > div.caseBasic > div.caseFlod{
+            width: 30px;
+            margin-left: 15px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseFlod{
+            font-size: 14px;
+            color: #4098c8;
+            cursor: pointer;
+        }
+        div.caseInfo > div.caseDetail{
+            display: block;
+            height: 350px;
+        }
+        div.caseInfo > div.caseDetail > div{
+            float: left;
+            font-size: 16px;
+        }
+        div.caseInfo > div.caseDetail > table{
+            width: 1265px;
+            height: 350px;
+            table-layout: fixed;
+            display: inline-block;
+
+        }
+        div.caseInfo > div.caseDetail > table > thead,div.caseInfo > div.caseDetail > table > thead > tr,div.caseInfo > div.caseDetail > table > tbody,div.caseInfo > div.caseDetail > table > tbody > tr{
+            display: block;
+            width: 100%;
+        }
+        div.caseDetail > table > thead > th > td,div.caseDetail > table > tbody > tr > td{
+            display: inline-block;
+            width: 33%;
+        }
+        div.caseInfo > div.caseDetail > table > tbody > tr{
+            height: 300px;
+            font-size: 15px;
+        }
+        div.caseInfo > div.caseDetail > table > thead > th{
+            border-right: 1px solid #DCDCDC;
+            width: 99.5%;
+            display: inline-block;
+        }
+        div.caseInfo > div.caseDetail > table > tbody > tr > td{
+            border-right: 1px solid #DCDCDC;
+            height: 100%;
+            line-height: 18px;
+            overflow: auto;
+        }
+
+
+    </style>
+</head>
+<body>
+<div style="height: 160px;background-color: #86a5f3; ">
+    <div style="height: 90px;display: flex;align-items: center ">
+        <div style="color: black; margin-left: 10px; margin-right: 1px">项目名称：</div>
+        <input id="appName" style="color: #4098c8;margin-right: 1px;width: 170px;height: 25px;color: red;font-size: 22px" type="text" readonly="readonly" />
+        </select>
+        <div style="color: black; margin-left: 100px; margin-right: 1px">场景用例ID：</div>
+        <input id="scenceId" style="color: #4098c8;margin-right: 1px;width: 170px;height: 25px;color: red;" type="text"  placeholder="根据场景用例ID搜索"/>
+        <button id="queryScence" style="height: 30px;width: 60px;margin-left: 10px;">查询</button>
+    </div>
+
+    <div id="nav">
+        <ul>
+            <li><a href="http://{{ host }}/home">接口定义</a></li>
+            <li><a id="goToScence" href="#" onclick="goToScence()">接口自动化</a></li>
+        </ul>
+    </div>
+
+    <div style="font-size: 18px">
+        <div><button style="margin: 10px 0px 0px 30px;;height: 30px;font-size: 16px;" onclick="popBox('0',null)">创建场景</button></div>
+    </div>
+
+    <div id="popLayer"></div>
+    <dialog id="popBox">
+        <div style="margin-left: 30px; margin-top: 20px; font-size: 18px"><span id="popBoxTitle" style="font-weight: bold">创建场景信息</span></div>
+        <div style="margin-left: 30px; margin-top: 20px">
+            <label><font color="red">*</font>名称</label>
+            <input id="scenceName" style="width:410px; height:30px; margin-left: 5px">
+        </div>
+        <div style="margin-left: 30px; margin-top: 20px">
+            <label><font color="red">*</font>状态</label>
+            <select id="scenceState" style="width:417px; height:37px; margin-left: 5px">
+                <option value="0">未完成</option>
+                <option value="1">已完成</option>
+            </select>
+        </div>
+        <div style="margin-left: 30px; margin-top: 20px">
+            <label><font color="red">*</font>用例等级</label>
+            <select id="scenceLevel" style="width:417px; height:37px; margin-left: 5px">
+                <option value="0">P0</option>
+                <option value="1">P1</option>
+                <option value="2">P2</option>
+                <option value="3">P3</option>
+                <option value="4">P4</option>
+                <option value="5">P5</option>
+                <option value="6">P6</option>
+                <option value="7">P7</option>
+                <option value="8">P8</option>
+                <option value="9">P9</option>
+                <option value="10">P10</option>
+            </select>
+        </div>
+        <div style="margin-left: 30px; margin-top: 20px">
+            <label>描述</label>
+            <textarea id="scenceDescribe" style="width:410px; height:60px; margin-left: 5px; vertical-align: middle"></textarea>
+        </div>
+        <div style="margin-top: 70px">
+            <button id="submitScence" style="margin-left: 450px">提交</button>
+            <button id="close" onclick="closeBox()" style="margin-left: 20px">关闭</button>
+        </div>
+    </dialog>
+
+</div>
+
+<div style="margin-top:5px;height: 710px;width: 1900px;">
+    <table id="scenceTable" border="0" cellspacing="0" cellpadding="0" width="100%">
+        <thead>
+            <tr>
+                <th style="width: 10%;">场景ID</th>
+                <th style="width: 20%;">场景名称</th>
+                <th style="width: 10%;">用例等级</th>
+                <th style="width: 10%;">当前状态</th>
+                <th style="width: 30%;">描述</th>
+                <th style="width: 20%;">操作</th>
+            </tr>
+        </thead>
+        <tbody id="dataBody"></tbody>
+    </table>
+</div>
+
+<div class="center_style">
+    <ul class="pagination" id="paging_num"></ul>
+</div>
+
+<dialog id="scenceDialog">
+    <div id="scenceLoading" style="display: none;width: 200px;height: 50px;text-align: center;line-height: 50px">运行中...</div>
+    <div id="scenceBox">
+        <div id="scence">
+            <div id="sceneceBasicInfo">
+                <div style="float: left;margin-left: 20px">
+                    <div style="float: left;width: 200px; ">场景ID：<span id="scenceId_span"></span></div>
+                    <div style="float: left;width: 500px;margin-left:20px ;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">场景名称：<span id="scenceName_span"></span></div>
+                </div>
+                <div style="float: left;width: 150px;margin-left: 360px;">运行结果：<span id="runResult" style="color: green"></span></div>
+            </div>
+            <div id="scenceRunInfo">
+                <div style="float: left;margin-left: 20px">
+                    <div style="float: left;width: 200px; ">步骤总数：<span id="stepNo_span"></span></div>
+                    <div style="float: left;width: 500px;margin-left:20px;">成功：<span id="successNo_span" style="color: green"></span> &nbsp;| 失败：<span id="failNo_span" style="color: red"></span></div>
+                </div>
+                <div style="float: left;width: 200px;margin-left: 360px;">成功比值：<span id="successRadio"></span></div>
+            </div>
+            <div id="scenceCasesInfo"></div>
+        </div>
+        <div id="closeScence">
+            <button onclick="closeScenceDialog()">关闭</button>
+        </div>
+    </div>
+</dialog>
+
+</body>
+
+<script type="text/javascript" src="../static/axios.js"></script>
+<script type="text/javascript" src="../static/method.js"></script>
+<script>
+    window.host = '{{ host }}';
+    window.onload = function () {
+        let appName = document.getElementById('appName');
+        appName.value = '{{ appName }}';
+        scenceList();
+    }
+
+    let queryScence = document.getElementById('queryScence');
+    queryScence.addEventListener('click',function () {
+        scenceList();
+    });
+
+    let pageIndex_init = '1';
+    let pageSize_init = '20';
+
+    function initSceDialog(){
+        let scenceName = document.getElementById('scenceName');
+        let scenceState = document.getElementById('scenceState');
+        let scenceLevel = document.getElementById('scenceLevel');
+        let scenceDescribe = document.getElementById('scenceDescribe');
+        scenceName.value = '';
+        scenceState.value = '0';
+        scenceLevel.value = '0';
+        scenceDescribe.value = '';
+    }
+
+    {#场景用例创建弹窗展示#}
+    function popBox(flag,id){
+        let popLayer = document.getElementById("popLayer");
+        let popBox = document.getElementById("popBox");
+        let popBoxTitle = document.getElementById("popBoxTitle");
+        let submitScence = document.getElementById("submitScence");
+        popLayer.style.display = "block";
+        popBox.style.display = "block";
+        initSceDialog();
+        //新增
+        if(flag == '0'){
+            popBoxTitle.innerHTML = '创建场景信息';
+            submitScence.setAttribute('onClick', "addOrEditScence('0',"+id+")");
+        }
+        //编辑
+        else if(flag == '1'){
+            popBoxTitle.innerHTML = '编辑场景信息';
+            let scenceId = null;
+            let scenceName = document.getElementById('scenceName');
+            let scenceState = document.getElementById('scenceState');
+            let scenceLevel = document.getElementById('scenceLevel');
+            let scenceDescribe = document.getElementById('scenceDescribe');
+            axios.post('http://{{ host }}/scenceDetail',{
+                scenceId:id
+            }).then(res=>{
+                let scence = res.data.data;
+                if(scence){
+                    //后续：生成id展示位置
+                    scenceId = scence['scence_id'];
+                    scenceName.value = scence['scence_name'];
+                    scenceLevel.value = scence['scence_level'];
+                    scenceState.value = scence['scence_state'];
+                    scenceDescribe.value = scence['scence_describe'];
+                }
+                submitScence.setAttribute('onClick', "addOrEditScence('1',"+scenceId+")");
+            })
+        }
+    }
+    {#场景用例创建弹窗隐藏#}
+    function closeBox(){
+        let popLayer = document.getElementById("popLayer");
+        let popBox = document.getElementById("popBox");
+        popLayer.style.display = "none";
+        popBox.style.display = "none";
+    }
+
+    function deleteSce(scenceId){
+        if(confirm('确认删除该场景用例？')){
+            axios.post('http://{{ host }}/deleteSceInfo',{
+            scenceId:scenceId
+            }).then(res=>{
+            if(res.data.code=='1'){
+                alert(res.data.msg);
+                scenceList();
+            }
+            })
+        }
+    }
+
+    function handleEnum(type,key){
+        if(type == 'scence_state') {
+            let stateDict = {
+                '0': '未完成',
+                '1': '已完成'
+            }
+            return stateDict[key]
+        }else if(type == 'scence_level'){
+            let levelDict = {
+                '0':'P0',
+                '1':'P1',
+                '2':'P2',
+                '3':'P3',
+                '4':'P4',
+                '5':'P0',
+                '6':'P0',
+                '7':'P0',
+                '8':'P0',
+                '9':'P0',
+                '10':'P10',
+            }
+            return levelDict[key]
+        }
+    }
+
+
+    function goToScence(){
+        let appName = document.getElementById('appName').value;
+        let goToScence = document.getElementById('goToScence');
+        goToScence.href = 'http://{{ host }}/scence?appName='+appName;
+    }
+
+    //分页
+    function paging_method(total){
+        let num = Math.ceil(total/pageSize_init);
+
+        let paging_num = document.getElementById('paging_num');
+        let pObjs = paging_num.childNodes;
+        //先清空
+        for (let i = pObjs.length - 1;i >= 0;i--){
+            paging_num.removeChild(pObjs[i]);
+        }
+        //后生成
+        for (let j = 1;j <= num; j++){
+            let editTd = document.createElement('li');
+            let editTd_a = document.createElement('a');
+            if(j.toString() == pageIndex_init){
+                editTd_a.className = 'active';
+            }
+            editTd_a.onclick=()=>{
+                pageIndex_init = j.toString();
+                scenceList();
+            }
+            editTd_a.innerHTML = j;
+            editTd.appendChild(editTd_a);
+            paging_num.appendChild(editTd);
+        }
+    }
+
+
+
+</script>
+</html>

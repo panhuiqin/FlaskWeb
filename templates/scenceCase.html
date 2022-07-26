@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>公司自动化用例维护 - 场景用例</title>
+
+    <style>
+    div#nav{
+        float: left;
+        height: 50px;
+        margin-left: 10px;
+    }
+    div#nav ul{
+        margin: 0 auto;
+        width: 240px;
+        display: inline-block;
+        flex-direction: row;
+        justify-content: center;
+    }
+    div#nav ul li{
+        list-style: none;
+        float: left;
+        width: 118px;
+        height: 50px;
+        line-height: 50px;
+        text-align: center;
+        border: 1px solid dimgray;
+        background: whitesmoke;
+    }
+    div#nav ul li a:link,a:visited{
+        color: black;
+        font-size: 16px;
+        text-decoration: none;
+    }
+    div#nav ul li a:hover{
+        color: black;
+        font-size: 18px;
+        font-weight:bold;
+        text-decoration: underline;
+    }
+    table thead th{
+    border-bottom:1px solid #DCDCDC;
+    height:40px;
+    line-height:40px;
+    background:#F5F5F5;
+    }
+    table tbody td{
+    border-bottom:1px solid #DCDCDC;
+    height:35px;
+    text-align:center;
+    }
+    table tbody tr button{
+        margin-left: 5px ;
+    }
+    table tbody tr:hover{
+    background-color: powderblue;
+    }
+        div#scenceBox{
+        height: 700px;
+        width: 1300px;
+        display: none;
+    }
+        div#scence{
+            height: 670px;
+        }
+
+        div#closeScence{
+            height: 45px;
+            text-align: center;
+            line-height: 40px;
+        }
+        div#closeScence > button{
+            font-size: 18px;
+        }
+        div#sceneceBasicInfo,div#scenceRunInfo{
+            height: 40px;
+            line-height: 40px;
+            font-size: 18px;
+            border-bottom: 1px solid #DCDCDC;
+            font-weight: bold;
+        }
+        div#scenceCasesInfo{
+            overflow: auto;
+            height: 580px;
+        }
+        div.caseInfo{
+            box-shadow: 1px 1px 5px 1px lightgrey;
+            height: 40px;
+            line-height: 40px;
+            margin: 10px;
+        }
+        div.caseInfo > div.caseBasic{
+            height: 40px;
+            border-bottom: 1px solid #DCDCDC;
+        }
+        div.caseInfo > div.caseBasic > div{
+            float: left;
+        }
+        div.caseInfo > div.caseBasic > div.caseNo{
+            width: 40px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseSeq{
+            width: 60px;
+            margin-left: 10px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseReqType{
+            width: 50px;
+            margin-left: 10px;
+            color: #4098c8;
+        }
+        div.caseInfo > div.caseBasic > div.caseRemark{
+            width: 300px;
+            margin-left: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        div.caseInfo > div.caseBasic > div.caseUrl{
+            width: 500px;
+            margin-left: 10px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        div.caseInfo > div.caseBasic > div.caseCode{
+            margin-left: 120px;
+            width: 50px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseResult{
+            width: 40px;
+            text-align: center;
+            font-weight: bold;
+        }
+        div.caseInfo > div.caseBasic > div.caseFlod{
+            width: 30px;
+            margin-left: 15px;
+            text-align: center;
+        }
+        div.caseInfo > div.caseBasic > div.caseFlod{
+            font-size: 14px;
+            color: #4098c8;
+            cursor: pointer;
+        }
+        div.caseInfo > div.caseDetail{
+            display: block;
+            height: 350px;
+        }
+        div.caseInfo > div.caseDetail > div{
+            float: left;
+            font-size: 16px;
+        }
+        div.caseInfo > div.caseDetail > table{
+            width: 1265px;
+            height: 350px;
+            table-layout: fixed;
+            display: inline-block;
+
+        }
+        div.caseInfo > div.caseDetail > table > thead,div.caseInfo > div.caseDetail > table > thead > tr,div.caseInfo > div.caseDetail > table > tbody,div.caseInfo > div.caseDetail > table > tbody > tr{
+            display: block;
+            width: 100%;
+        }
+        div.caseDetail > table > thead > th > td,div.caseDetail > table > tbody > tr > td{
+            display: inline-block;
+            width: 33%;
+        }
+        div.caseInfo > div.caseDetail > table > tbody > tr{
+            height: 300px;
+            font-size: 15px;
+        }
+        div.caseInfo > div.caseDetail > table > thead > th{
+            border-right: 1px solid #DCDCDC;
+            width: 99.5%;
+            display: inline-block;
+        }
+        div.caseInfo > div.caseDetail > table > tbody > tr > td{
+            border-right: 1px solid #DCDCDC;
+            height: 100%;
+            text-align: left;
+            line-height: 18px;
+            overflow: auto;
+        }
+    </style>
+
+</head>
+
+<body>
+<div style="height: 160px;background-color: #86a5f3; ">
+    <div style="height: 90px;display: flex;align-items: center ">
+        <div style="color: black; margin-left: 10px; margin-right: 1px;">项目名称：</div>
+        <input id="appName" style="color: #4098c8;margin-right: 1px;width: 170px;height: 25px;color: red;font-size: 22px" type="text" readonly="readonly" />
+    </div>
+
+    <div id="nav">
+        <ul>
+            <li><a href="http://{{ host }}/home">接口定义</a></li>
+            <li><a id="goToScence" href="#" onclick="goToScence()">接口自动化</a></li>
+        </ul>
+    </div>
+</div>
+
+<div style="margin-top: 10px" id="scenceInfo">
+    <div style="color: black; margin-left: 70px; margin-right: 1px;font-size:18px;width: 100px">场景ID：<span id="scenceId_span_ls"></span></div>
+    <div style="color: black; margin-left: 100px; margin-right: 1px;font-size:18px;width: 500px">场景名称：<span id="scenceName_span_ls"></span></div>
+    <div style="color: black; margin-left: 100px; margin-right: 1px;font-size:18px;width: 150px">步骤总数：<span id="stepNo_span_ls"></span></div>
+        <button style="color: purple;margin-left:550px;font-size:18px" onclick="popBox()">接口列表导入</button>
+        <button style="color: purple;margin-left:30px;font-size:18px" onclick="debugScence()">调试</button>
+        <button style="color: purple;margin-left:30px;font-size:18px" onclick="saveScenceCases()">保存</button>
+</div>
+
+<div style="margin-top:5px;height: 710px;overflow: auto;">
+    <table border="0" cellspacing="0" cellpadding="0" width="100%">
+        <thead>
+            <tr>
+                <th style="width: 10%;">用例ID</th>
+                <th style="width: 10%;">项目名称</th>
+                <th style="width: 20%;">接口路径</th>
+                <th style="width: 30%;">用例标题</th>
+                <th style="width: 10%;">请求方式</th>
+                <th style="width: 10%;">用例等级</th>
+                <th style="width: 10%;">操作</th>
+            </tr>
+        </thead>
+        <tbody id="dataBody" style="text-align: center;"></tbody>
+    </table>
+</div>
+
+<div id="popLayer" style="text-align: center;"></div>
+<dialog id="popBox">
+    <div style="margin-left: 650px; margin-top: 5px; font-size: 20px"><span id="popBoxTitle" style="font-weight: bold;font-size: 26px">接口导入</span></div>
+    <div style="height: 40px;margin: 10px 0px 10px 0px;">
+        <div style="height: 40px;float: left;">
+            <div id="appName_box">
+                项目名称：
+                <select id="appName_sel"></select>
+            </div>
+            <div id="casePath_box">
+                接口路径：<input id="casePath_text" type="text" placeholder="接口路径">
+            </div>
+            <div id="caseSeq_box">
+                用例ID：<input id="caseSeq_text" type="text" placeholder="用例ID">
+            </div>
+            <input type="button" value="查询" onclick="popBox()" style="font-size: 16px;height: 35px;margin-left: 20px">
+        </div>
+        <div style="float: left;margin-left: 140px;font-size: 20px;line-height: 30px;">当前已选择<span id="caseCount" style="color: dodgerblue;font-weight: bold">0</span>条用例</div>
+        <div style="margin-left: 1350px;">
+            <button id="submitScenceCase" style="font-size: 18px" onclick="closeBox(0)">提交</button>
+            <button id="close" onclick="closeBox(1)" style="font-size: 18px;margin-left: 10px">关闭</button>
+        </div>
+    </div>
+    <div style="height: 650px">
+        <table border="0" cellspacing="0" cellpadding="0" width="100%">
+            <thead>
+                <tr>
+                    <th style="width: 5%;"></th>
+                    <th style="width: 5%;">用例ID</th>
+                    <th style="width: 20%;">用例说明</th>
+                    <th style="width: 10%;">项目名称</th>
+                    <th style="width: 20%;">接口路径</th>
+                    <th style="width: 15%;">请求参数</th>
+                    <th style="width: 15%;">返回参数</th>
+                </tr>
+            </thead>
+            <tbody id="caseDataBody" style="text-align: center;"></tbody>
+        </table>
+    </div>
+    <div class="center_style" style="margin-top: 10px;">
+        <ul class="pagination" id="paging_num"></ul>
+    </div>
+</dialog>
+
+<dialog id="run_case" style="width: 1000px; height: 570px; ">
+    <div id="run_case_url">
+        接口：
+    </div>
+    <div id="run_case_caseTitle">
+        用例标题：
+    </div>
+    <label for="assertionResults"></label><textarea id="assertionResults"
+                                                    style="width: 44%;height: 450px; font-size: 14px;" type="text"
+                                                    name="user">入参</textarea>
+    <label for="outputResults"></label><textarea id="outputResults" style="width: 54%;height: 450px; font-size: 14px;"
+                                                 type="text/html" name="user"
+                                                 readonly="readonly">运行结果：</textarea>
+
+    <div style="display: flex">
+        <button id="run_123"
+                style="margin-left: 827px;margin-top: 0; width: 80px; height: 40px">
+            运行
+        </button>
+
+        <button id="cancel" onclick="CloseDisplay_case()"
+                style="margin-top: 0; width: 80px; margin-left: 10px; height: 40px">
+            关闭
+        </button>
+    </div>
+
+
+</dialog>
+
+<dialog id="scenceDialog">
+    <div id="scenceLoading" style="display: none;width: 200px;height: 50px;text-align: center;line-height: 50px">运行中...</div>
+    <div id="scenceBox">
+        <div id="scence">
+            <div id="sceneceBasicInfo">
+                <div style="float: left;margin-left: 20px">
+                    <div style="float: left;width: 200px; ">场景ID：<span id="scenceId_span"></span></div>
+                    <div style="float: left;width: 500px;margin-left:20px ;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">场景名称：<span id="scenceName_span"></span></div>
+                </div>
+                <div style="float: left;width: 150px;margin-left: 360px;">运行结果：<span id="runResult" style="color: green"></span></div>
+            </div>
+            <div id="scenceRunInfo">
+                <div style="float: left;margin-left: 20px">
+                    <div style="float: left;width: 200px; ">步骤总数：<span id="stepNo_span"></span></div>
+                    <div style="float: left;width: 500px;margin-left:20px;">成功：<span id="successNo_span" style="color: green"></span> &nbsp;| 失败：<span id="failNo_span" style="color: red"></span></div>
+                </div>
+                <div style="float: left;width: 200px;margin-left: 360px;">成功比值：<span id="successRadio"></span></div>
+            </div>
+            <div id="scenceCasesInfo"></div>
+        </div>
+        <div id="closeScence">
+            <button onclick="closeScenceDialog()">关闭</button>
+        </div>
+    </div>
+</dialog>
+
+</body>
+
+<style>
+    table {
+        table-layout: fixed;
+        word-break: break-all;
+    }
+    table td {
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+    #popLayer{
+        display: none;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(192,192,192,0.3);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    #popBox{
+        display: none;
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        height: 800px;
+        width: 1500px;
+    }
+    div.center_style{
+        text-align: center;
+    }
+    ul.pagination {
+        display: inline-block;
+        padding: 0;
+        margin: 0;
+    }
+    ul.pagination li {
+        display: inline;
+    }
+    ul.pagination li a {
+        color: black;
+        float: left;
+        padding: 8px 16px;
+        text-decoration: none;
+        transition: background-color .3s;
+        border: 1px solid #ddd;
+    }
+    ul.pagination li a.active {
+        background-color: #86a5f3;
+        color: white;
+        border: 1px solid #86a5f3;
+    }
+    ul.pagination li a:hover:not(.active) {
+        background-color: #ddd;
+    }
+    div#appName_box,div#casePath_box,div#caseSeq_box{
+        float: left;
+        margin-left: 20px;
+        height: 40px;
+        font-size: 18px;
+    }
+    div#appName_box > select{
+        font-size: 18px;
+        height: 35px;
+    }
+    div#casePath_box > input,div#caseSeq_box > input{
+        font-size: 16px;
+        height: 30px;
+    }
+    div#scenceInfo >div{
+        float: left;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+</style>
+{#<script src="https://unpkg.com/axios/dist/axios.js"></script>#}
+<script type="text/javascript" src="../static/axios.js"></script>
+<script type="text/javascript" src="../static/method.js"></script>
+<script>
+    window.host = '{{ host }}';
+    let scenceCase = {{ scenceCase|tojson }};
+    let stepNo_ls = document.getElementById('stepNo_span_ls');
+    //需要save的接口用例
+    let caseSeq_ls = [];
+    let caseSeq_length = 0;
+    scenceCaseData = scenceCase['data']['cases'];
+    //获取原有接口id集
+    if (scenceCaseData) {
+        caseSeq_ls = [];
+        scenceCaseData.map(caseData=>{
+            caseSeq_ls.push(caseData['case_seq'])
+        })
+    }
+    //checked的接口用例
+    let checked_cases_ls = [];
+    //submitted的接口用例
+    let submitted_cases_ls = [];
+    window.onload = function () {
+        let appName = document.getElementById('appName');
+        let scenceId_ls = document.getElementById('scenceId_span_ls');
+        let scenceName_ls = document.getElementById('scenceName_span_ls');
+        appName.value = scenceCase['data']['app_name'];
+        scenceId_ls.innerText = scenceCase['data']['scence_id'];
+        scenceName_ls.innerText = scenceCase['data']['scence_name'];
+        stepNo_ls.innerText = !scenceCase['data']['step_no'] ? '0' : scenceCase['data']['step_no'];
+        scenceCaseList();
+        //初始化导入弹窗select的option
+        initBox();
+    }
+
+    //原有 + 新选中提交 的接口详情ls
+    let Cases = []
+    function scenceCaseList() {
+        let dataBody = document.getElementById("dataBody");
+        dataBody.innerHTML = '';
+        let cases_params_ls = [0,2,7,15,4]
+        //暂无数据缺省展示
+        if(caseSeq_ls.length == 0){
+            let tr = document.createElement('tr');
+            let td = document.createElement('td');
+            td.setAttribute('colspan','7');
+            td.innerText = '暂无数据';
+            tr.appendChild(td);
+            dataBody.appendChild(tr);
+        }
+        //更新步骤总数
+        stepNo_ls.innerHTML = parseInt(caseSeq_ls.length);
+        //展示 原有 + 勾选提交的接口用例
+        axios.post('http://{{ host }}/submittedCases',{
+            params:caseSeq_ls
+        }).then(res=>{
+            Cases = res.data.data;
+            console.log(Cases);
+            if(Cases.length > 0){
+                //遍历
+                Cases.map(caseData=>{
+                let tr = document.createElement('tr');
+                cases_params_ls.map(param=>{
+                    let td = document.createElement('td');
+                    td.setAttribute('title',caseData[param]);
+                    if(param == 0){
+                        td.className = 'caseSeq';
+                    }
+                    td.innerHTML = caseData[param];
+                    tr.appendChild(td);
+                })
+
+                let caseLevel = document.createElement('td');
+                caseLevel.innerHTML = '???';
+                tr.appendChild(caseLevel);
+
+                //操作
+                let handleTd = document.createElement('td');
+                //单接口运行
+                let runBt = document.createElement('button');
+                runBt.innerHTML = '运行';
+                runBt.setAttribute('onClick', "one_run(" + caseData[0] + ")")
+                handleTd.appendChild(runBt);
+                //单接口编辑
+                let editA = document.createElement('a');
+                editA.href = 'http://{{ host }}/submitUpdate?result='+ caseData[0];
+                let editBt = document.createElement('button');
+                editBt.innerHTML = '编辑';
+                editA.appendChild(editBt);
+                handleTd.appendChild(editA);
+                //删除
+                let deleteBt = document.createElement('button');
+                deleteBt.innerHTML = '删除';
+                deleteBt.setAttribute('onclick','deleteScenceCases('+caseData[0]+')');
+                handleTd.appendChild(deleteBt);
+
+                tr.appendChild(handleTd);
+                dataBody.appendChild(tr);
+                })
+            }
+        })
+    }
+
+    function goToScence(){
+        let appName = document.getElementById('appName').value;
+        let goToScence = document.getElementById('goToScence');
+        goToScence.href = 'http://{{ host }}/scence?appName='+appName;
+    }
+
+    let pageIndex_init = 1;
+    let pageSize_init = 15;
+    {#接口用例分页展示#}
+    function popBox(){
+        let popLayer = document.getElementById("popLayer");
+        let popBox = document.getElementById("popBox");
+        //查询条件
+        let appName_sel = document.getElementById('appName_sel');
+        let casePath_text = document.getElementById('casePath_text').value;
+        let caseSeq_text = document.getElementById('caseSeq_text').value;
+        let index = appName_sel.selectedIndex;
+        let appName = appName_sel['options'][index].value;
+
+        //已选中
+        //checked_cases_ls = caseSeq_ls; 浅复制 修改checked_cases_ls的时候会一同修改到caseSeq_ls
+        checked_cases_ls = [...caseSeq_ls];
+        let caseCount = document.getElementById('caseCount');
+        caseCount.innerText = checked_cases_ls.length;
+
+        //展示
+        let caseDataBody = document.getElementById('caseDataBody');
+        caseDataBody.innerHTML = '';
+        popLayer.style.display = "block";
+        popBox.style.display = "block";
+        let params_ls = [0,1,2,4,5,6]
+        //请求接口用例列表 isChange:'0'写死仅返回已维护的单接口用例
+        axios.post('http://{{ host }}/queryCaseInfo',{
+            appName: appName,
+            isChange: '0',
+            apiPath: casePath_text,
+            apiCase: caseSeq_text,
+            apiRelate: '',
+            pageIndex: pageIndex_init,
+            pageSize: pageSize_init
+        }).then(res=>{
+            if(parseInt(res.data.total) > 0){
+                let paging_number = res.data.total;
+                paging_method(paging_number);
+                let cases = res.data.data.list;
+                cases.map(cs=>{
+                    let tr = document.createElement('tr');
+                    tr.setAttribute('height','40px');
+                    let check_td = document.createElement('td');
+                    let input_check = document.createElement('input');
+                    input_check.setAttribute('type','checkbox');
+                    //展示已选中状态
+                    if(caseSeq_ls.length > 0){
+                        for (let i = 0;i < caseSeq_ls.length;i++){
+                            if(caseSeq_ls[i] === cs[0]){
+                                input_check.checked = true;
+                                break;
+                            }
+                        }
+                    }
+                    check_td.appendChild(input_check);
+                    input_check.setAttribute('onclick','checkedCases(this,'+cs[0]+')');
+                    tr.appendChild(check_td);
+                    params_ls.map(param=>{
+                        let td = document.createElement('td');
+                        td.setAttribute('title',cs[param]);
+                        td.innerHTML = (cs[param] != '' && cs[param] != null ) ? cs[param] : '-';
+                        tr.appendChild(td);
+                    })
+                    caseDataBody.appendChild(tr);
+                })
+            }
+            else if(parseInt(res.data.total) == 0){
+                let tr = document.createElement('tr');
+                tr.setAttribute('height','40px');
+                let td = document.createElement('td');
+                td.setAttribute('colspan','7');
+                td.innerHTML = '暂无数据';
+                tr.appendChild(td);
+                caseDataBody.appendChild(tr);
+            }
+        })
+    }
+
+    function initBox() {
+        let appName_sel = document.getElementById('appName_sel');
+        let appName_sel_options = document.getElementById('appName_sel').options;
+        axios.get('http://{{ host }}/screeningConditions').then(res=>{
+            res.data.data.list.map(item=>{
+                appName_sel_options.add(new Option(item, item));
+            })
+        })
+    }
+
+    {#接口用例分页隐藏#}
+    // flag 0=提交 checked的追加给submitted;1=关闭 清空当前checked的
+    function closeBox(flag){
+        let popLayer = document.getElementById("popLayer");
+        let popBox = document.getElementById("popBox");
+        let caseDataBody = document.getElementById('caseDataBody');
+        popLayer.style.display = "none";
+        popBox.style.display = "none";
+        caseDataBody.innerHTML = '';
+        if (flag === 0){
+            //提交 则追加
+            if(checked_cases_ls.length>0){
+                submitted_cases_ls = checked_cases_ls;
+            }
+            //追加提交的接口id集
+            if(submitted_cases_ls.length > 0){
+                caseSeq_ls = submitted_cases_ls;
+            }
+            checked_cases_ls = [];
+            submitted_cases_ls = [];
+        }
+        else if(flag === 1){
+            //清除上次已提交 但这次未提交的checked
+            for(let i = 0;i < caseSeq_ls;i++){
+                for(let j = 0;j < checked_cases_ls;j++){
+                    if(caseSeq_ls[i] == checked_cases_ls[j]){
+                        caseSeq_ls.splice(caseSeq_ls.indexOf(caseSeq_ls[i]),1)
+                    }
+                }
+            }
+            checked_cases_ls = [];
+            submitted_cases_ls = caseSeq_ls;
+        }
+        scenceCaseList();
+    }
+
+    //勾选用例 push到checked_cases_ls
+    function checkedCases(elem,caseSeq){
+        let caseCount = document.getElementById('caseCount');
+        if(elem.checked){
+            checked_cases_ls.push(caseSeq);
+        }
+        else{
+            checked_cases_ls.splice(checked_cases_ls.indexOf(caseSeq),1)
+        }
+        caseCount.innerText = checked_cases_ls.length;
+    }
+
+    //保存场景接口集
+    function saveScenceCases() {
+        caseSeq_length = caseSeq_ls.length;
+        addOrEditScence('2',scenceCase['data']['scence_id']);
+    }
+
+    //删除场景单接口
+    function deleteScenceCases(caseSeq) {
+        if(confirm('确认删除该接口用例？')){
+            caseSeq_ls.splice(caseSeq_ls.indexOf(caseSeq),1);
+            scenceCaseList();
+        }
+    }
+
+    //分页
+    function paging_method(total){
+        let num = Math.ceil(total/pageSize_init);
+
+        let paging_num = document.getElementById('paging_num');
+        let pObjs = paging_num.childNodes;
+        //先清空
+        for (let i = pObjs.length - 1;i >= 0;i--){
+            paging_num.removeChild(pObjs[i]);
+        }
+        //后生成
+        for (let j = 1;j <= num; j++){
+            let editTd = document.createElement('li');
+            let editTd_a = document.createElement('a');
+            if(j.toString() == pageIndex_init){
+                editTd_a.className = 'active';
+            }
+            editTd_a.onclick=()=>{
+                pageIndex_init = j;
+                popBox();
+            }
+            editTd_a.innerHTML = j;
+            editTd.appendChild(editTd_a);
+            paging_num.appendChild(editTd);
+        }
+    }
+
+    //单接口运行
+    let runCase_dialog_id = document.getElementById("run_case");
+    function CloseDisplay() {
+        dialog_id.close();
+
+        let caseTitle = document.getElementById("run_case_url")
+        let run_case_caseTitle = document.getElementById("run_case_caseTitle")
+        let output_Results = document.getElementById("outputResults")
+        let assertion_Results = document.getElementById("assertionResults")
+        caseTitle.innerHTML = "接口："
+        run_case_caseTitle.innerHTML = "用例标题："
+        assertion_Results.innerHTML = "断言结果："
+        output_Results.innerHTML = "正在运行中，请稍等......"
+    }
+
+    function one_run(index) {
+        runCase_dialog_id.showModal()
+
+        let caseTitle = document.getElementById("run_case_url")
+        let run_case_caseTitle = document.getElementById("run_case_caseTitle")
+        let assertion_Results = document.getElementById("assertionResults")
+
+        let output_Results = document.getElementById("outputResults")
+        output_Results.value = "运行结果"
+
+        axios.post('http://{{ host }}/queryCaseAllInfo', {
+            caseId: index
+        })
+            .then(response => {
+                if (response.data) {
+                    let url_data = response.data.data["apiType"] + "://" + response.data.data["apiHost"] + response.data.data["apiPath"]
+                    let case_title = response.data.data["caseTitle"]
+                    let parameter = response.data.data["parameter"]
+
+                    caseTitle.innerHTML = "接口：" + url_data
+                    run_case_caseTitle.innerHTML = "用例标题：" + case_title
+                    assertion_Results.innerHTML = parameter
+
+                    if (parameter === '') {
+                        assertion_Results.value = parameter;
+                    } else assertion_Results.value = JSON.stringify(JSON.parse(parameter), null, "\t");
+                }
+            })
+        {#one_run_result_index = index#}
+        document.getElementById("run_123").onclick = () => one_run_result(index)
+    }
+
+
+    function one_run_result(index) {
+
+        console.log(index)
+        let caseTitle = document.getElementById("run_case_url")
+        let run_case_caseTitle = document.getElementById("run_case_caseTitle")
+        axios.post('http://{{ host }}/queryCaseAllInfo', {
+            caseId: index
+        })
+            .then(response => {
+                if (response.data) {
+                    let url_data = response.data.data["apiType"] + "://" + response.data.data["apiHost"] + response.data.data["apiPath"]
+                    let case_title = response.data.data["caseTitle"]
+
+                    caseTitle.innerHTML = "接口：" + url_data
+                    run_case_caseTitle.innerHTML = "用例标题：" + case_title
+                }
+            })
+
+        let output_Results = document.getElementById("outputResults")
+        let assertion_Results = document.getElementById("assertionResults")
+        assertion_Results.innerHTML = "断言结果："
+        output_Results.value = "正在运行中，请稍等......"
+        axios.post('http://{{ host }}/runTest', {
+            caseId: index
+        })
+            .then(req => {
+                if (req.data) {
+                    document.getElementById("outputResults").value = "运行url：\n" + req.data.url + "\n" + "运行结果：\n" + req.data.data
+                    assertion_Results.innerHTML = "断言结果：\n" + req.data.results
+                }
+            }).catch(err => {
+            alert("操作异常" + err)
+            console.error(err)
+        })
+    }
+
+    function CloseDisplay_case() {
+        runCase_dialog_id.close();
+    }
+
+    function debugScence() {
+        let scence =scenceCase['data'];
+        scenceRunResult(scence=scence,caseIdList=caseSeq_ls)
+    }
+
+
+
+</script>
+
+</html>
